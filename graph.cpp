@@ -7,6 +7,7 @@ class Edge;
 template <typename T>
 class Node{
 public:
+   int id;
    int color;
    T data;
    bool checked;
@@ -14,7 +15,6 @@ public:
    {
       color = 0;
       this->data = data;
-      this.id=id;
    }
    void check(){checked = true;}
    void uncheck(){checked = false;}
@@ -48,14 +48,15 @@ template <typename T, typename W>
 class Graph
 {
 public:
+   int number_of_nodes=0;
    Graph(bool directed) {}
-   vector<Node> node_map = new vector<Node>();
    vector<vector<Edge>> adjacency_matrix = new vector<vector<Node>>();
    Node<T> addNode(const T &data)
    {
+      // incrementing the number of nodes for the next node id
+      number_of_nodes=number_of_nodes+1;
       Node<T> newnode = Node<T>(data);
-      // insert in node_map the pointer to newnode
-      node_map.push_back(newnode);
+      newnode.id = number_of_nodes;
       // insert a NULL* in each vector
       vector<Edge> temp = new vector<Edge>();
       for (auto& vec : adjacency_matrix) {
