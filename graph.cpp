@@ -9,12 +9,12 @@ class Node{
 public:
    int color;
    T data;
-   vector<Edge> from_edges;
    bool checked;
    Node(const T data)
    {
       color = 0;
       this->data = data;
+      this.id=id;
    }
    void check(){checked = true;}
    void uncheck(){checked = false;}
@@ -49,17 +49,31 @@ class Graph
 {
 public:
    Graph(bool directed) {}
-
+   vector<Node> node_map = new vector<Node>();
+   vector<vector<Edge>> adjacency_matrix = new vector<vector<Node>>();
    Node<T> addNode(const T &data)
    {
       Node<T> newnode = Node<T>(data);
+      // insert in node_map the pointer to newnode
+      node_map.push_back(newnode);
+      // insert a NULL* in each vector
+      vector<Edge> temp = new vector<Edge>();
+      for (auto& vec : adjacency_matrix) {
+      vec.push_back(nullptr);
+      temp.push_back(nullptr);
+      }
+      temp.push_back(nullptr);
+      // insert a vector of NULL in adjacency matrix of length len(vector)
+      adjacency_matrix.push_back(temp);
+      delete temp;
+
       return newnode;
    }
 
    void addEdge(const Node<T> &src, const Node<T> &dest, const W &weight = W())
    {
       Edge<T, W> newEdge = Edge<T, W>(src, dest, weight);
-      src.from_edges.push_back(newEdge);
+
    }
 
 //    bool hasCycle() const {}
