@@ -1,8 +1,6 @@
 #include <vector>
 using namespace std;
 // #define graph;
-template <typename T, typename W>
-class Edge;
 
 template <typename T>
 class Node{
@@ -22,8 +20,7 @@ public:
 };
 
 template <typename T, typename W>
-class Edge
-{
+class Edge{
 public:
    Edge(const Node<T> &src, const Node<T> &dest, const W &weight)
    {
@@ -51,6 +48,7 @@ public:
    Graph(bool directed) {}
    vector<Node> node_map = new vector<Node>();
    vector<vector<Edge>> adjacency_matrix = new vector<vector<Node>>();
+
    Node<T> addNode(const T &data)
    {
       Node<T> newnode = Node<T>(data);
@@ -80,17 +78,23 @@ public:
       Edge<T, W> newEdge = Edge<T, W>(src, dest, weight);
       int source, destination, count = 0;
       for (auto& node : node_map) {
-      if(node == src){
-         source = count
-      }else if(node == dest){
-         destination = count
-      }
+      if(node == src){source = count}
+      else if(node == dest){destination = count}
       count = count + 1;
       }
       adjacency_matrix[source][destination] = newEdge;
    }
 
-//    bool hasCycle() const {}
+   bool hasCycle() const {
+      int row = 0;
+      for (auto& vec : adjacency_matrix) {
+         int column = 0;
+         for (auto& edge : vec){
+            edge.dest.check();
+         }
+         row=row+1;
+      }
+   }
 
    // Algorithm implementations
 //    vector<int> nodeColoring() const {}
