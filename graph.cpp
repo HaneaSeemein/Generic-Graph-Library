@@ -58,7 +58,7 @@ public:
       node_map.push_back(newnode);
       // insert a NULL* in each vector
       vector<Edge> temp = new vector<Edge>();
-      for (auto& vec : adjacency_matrix) {
+      for (vector<Node> vec : adjacency_matrix) {
       vec.push_back(nullptr);
       temp.push_back(nullptr);
       }
@@ -70,10 +70,24 @@ public:
       return newnode;
    }
 
-   void addEdge(const int src, const int dest, const W &weight = W())
+   void addEdge_bynodeid(const int src, const int dest, const W &weight = W())
    {  
       Edge<T, W> newEdge = Edge<T, W>(node_map[src], node_map[dest], weight);
       adjacency_matrix[src][dest] = newEdge;
+   }
+   void addEdge_bynodepointer(const Node<T> &src, const Node<T> &dest, const W &weight = W())
+   {  
+      Edge<T, W> newEdge = Edge<T, W>(src, dest, weight);
+      int source, destination, count = 0;
+      for (auto& node : node_map) {
+      if(node == src){
+         source = count
+      }else if(node == dest){
+         destination = count
+      }
+      count = count + 1;
+      }
+      adjacency_matrix[source][destination] = newEdge;
    }
 
 //    bool hasCycle() const {}
