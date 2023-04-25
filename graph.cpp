@@ -11,36 +11,29 @@ public:
    Node(const T data)
    {
       color = 0;
-      this->data = data;
+      this.data = data;
       this.id=id;
    }
-   void check(){checked = true;}
-   void uncheck(){checked = false;}
-
 };
 
 template <typename T, typename W>
 class Edge{
 public:
-   Edge(const Node<T> &src, const Node<T> &dest, const W &weight)
+   Edge(const int src, const int dest, const W &weight)
    {
       this->src = src;
       this->dest = dest;
       this->weight = weight;
       this->color = 0;
    }
-
    Node<T> getSource() const{return src;}
-
    Node<T> getDestination() const{return dest;}
-
    W getWeight() const{return weight;}
 private:
-   Node<T> src, dest;
+   int src, dest;
    W weight;
    int color;
 };
-
 template <typename T, typename W>
 class Graph
 {
@@ -85,16 +78,19 @@ public:
       adjacency_matrix[source][destination] = newEdge;
    }
 
-   bool hasCycle() const {
-      int row = 0;
-      for (auto& vec : adjacency_matrix) {
-         int column = 0;
-         for (auto& edge : vec){
-            edge.dest.check();
-         }
-         row=row+1;
-      }
-   }
+    bool hasCycle() const {
+        for (const Node<T>& node : node_map) {
+            if (!node.checked) {
+                if (dfs(node, -1)) {
+                    return true;
+                }
+            }
+            for(auto& node : node_map) {
+               node.checked=false;
+            }
+        }
+        return false;
+    }
 
    // Algorithm implementations
 //    vector<int> nodeColoring() const {}
@@ -107,6 +103,23 @@ public:
 //    vector<T> iterativeDFS(const T &start) const {}
 //    vector<T> uniformCostSearch(const T &start, const T &goal) const {}
 //    vector<T> aStarSearch(const T &start, const T &goal, function<double(T, T)> heuristic) const {}
+private:
+    bool dfs(const Node<T>& node, int parent) const {
+        node_map[node.id].checked = true;
+        for (const Edge<T, W>& edge : adjacency_matrix[node.id]) {
+            if (edge) {
+                int neighbor = edge.getDestination().id;
+                if (!node_map[neighbor].checked) {
+                    if (dfs(node_map[neighbor], node.id)) {
+                        return true;
+                    }
+                } else if (neighbor != parent || directed) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 };
 
 // #define later;
